@@ -1,0 +1,22 @@
+<!--
+  Hexward Labs - Wazuh decoder for Hexward Finding Schema v1 over syslog.
+  https://github.com/nizartuanku/hexward-wazuh
+
+  Only needed for the syslog path (product -> Wazuh manager over the
+  network). The file path (Wazuh agent reading *.ndjson with
+  log_format json) uses Wazuh's built-in JSON decoder and needs nothing here.
+
+  Products send: -syslog <manager>:<port> -syslog-format json
+  APP-NAME is always "hexward"; the message is one HFS JSON object.
+  Both syslog headers work: RFC 3164 is pre-decoded by Wazuh itself (first
+  decoder), RFC 5424 - the products' default - is matched by the second.
+-->
+<decoder name="hexward">
+  <program_name>^hexward$</program_name>
+  <plugin_decoder>JSON_Decoder</plugin_decoder>
+</decoder>
+
+<decoder name="hexward">
+  <prematch type="pcre2">^1 \S+ \S+ hexward \S+ \S+ \S+ </prematch>
+  <plugin_decoder offset="after_prematch">JSON_Decoder</plugin_decoder>
+</decoder>

@@ -1,0 +1,6 @@
+name: json	id: 100511	level: 10
+name: json	id: 100520	level: 3
+name: json	id: 100530	level: 3
+name: json	id: 100512	level: 7
+name: hexward	id: 100511	level: 10
+name: hexward	id: 100511	level: 10

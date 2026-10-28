@@ -1,0 +1,27 @@
+name: logtest
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  wazuh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start a Wazuh manager with the Hexward decoder and rules
+        run: |
+          docker run -d --name wz \
+            -v "$PWD/rules/hexward_rules.xml:/var/ossec/etc/rules/hexward_rules.xml:ro" \
+            -v "$PWD/decoders/hexward_decoders.xml:/var/ossec/etc/decoders/hexward_decoders.xml:ro" \
+            wazuh/wazuh-manager:4.14.9
+          for i in $(seq 1 60); do
+            docker exec wz /var/ossec/bin/wazuh-control status 2>/dev/null | grep -q 'wazuh-analysisd is running' && break
+            sleep 5
+          done
+          sleep 10
+      - name: Every test vector hits the expected rule and level
+        run: |
+          ./test/run-logtest.sh wz > got.txt
+          diff -u test/expected.txt got.txt

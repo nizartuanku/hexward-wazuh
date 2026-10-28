@@ -1,0 +1,86 @@
+<!--
+  Hexward Labs - Wazuh rules for Hexward Finding Schema v1 (hexward.finding/1)
+  https://github.com/nizartuanku/hexward-wazuh
+
+  Rule ids 100500-100599 (Wazuh's custom range). One parent per input path,
+  then one child per (event, severity):
+
+    critical opened -> level 12    high opened -> level 10
+    medium opened   -> level 7     low opened  -> level 4
+    info opened     -> level 3     resolved    -> level 3 (never pages)
+    snapshot        -> level 3     (bulk export, state not news)
+
+  Field names are the HFS field names: finding.severity, finding.check,
+  finding.target, finding.fingerprint, product, src_ip, ...
+-->
+<group name="hexward,posture,">
+
+  <!-- Path A: a Wazuh agent (or the manager) reading *.ndjson with log_format json -->
+  <rule id="100500" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="schema">^hexward.finding/1$</field>
+    <description>Hexward finding (file)</description>
+  </rule>
+
+  <!-- Path B: syslog from a product, decoded by the "hexward" decoder -->
+  <rule id="100501" level="0">
+    <decoded_as>hexward</decoded_as>
+    <field name="schema">^hexward.finding/1$</field>
+    <description>Hexward finding (syslog)</description>
+  </rule>
+
+  <rule id="100510" level="12">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^opened$</field>
+    <field name="finding.severity">^critical$</field>
+    <description>Hexward $(product): critical - $(finding.title) on $(finding.target)</description>
+    <group>hexward_open,hexward_critical,</group>
+  </rule>
+
+  <rule id="100511" level="10">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^opened$</field>
+    <field name="finding.severity">^high$</field>
+    <description>Hexward $(product): high - $(finding.title) on $(finding.target)</description>
+    <group>hexward_open,hexward_high,</group>
+  </rule>
+
+  <rule id="100512" level="7">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^opened$</field>
+    <field name="finding.severity">^medium$</field>
+    <description>Hexward $(product): medium - $(finding.title) on $(finding.target)</description>
+    <group>hexward_open,hexward_medium,</group>
+  </rule>
+
+  <rule id="100513" level="4">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^opened$</field>
+    <field name="finding.severity">^low$</field>
+    <description>Hexward $(product): low - $(finding.title) on $(finding.target)</description>
+    <group>hexward_open,hexward_low,</group>
+  </rule>
+
+  <rule id="100514" level="3">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^opened$</field>
+    <field name="finding.severity">^info$</field>
+    <description>Hexward $(product): info - $(finding.title) on $(finding.target)</description>
+    <group>hexward_open,hexward_info,</group>
+  </rule>
+
+  <rule id="100520" level="3">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^resolved$</field>
+    <description>Hexward $(product): resolved - $(finding.title) on $(finding.target)</description>
+    <group>hexward_resolved,</group>
+  </rule>
+
+  <rule id="100530" level="3">
+    <if_sid>100500, 100501</if_sid>
+    <field name="event">^snapshot$</field>
+    <description>Hexward $(product): current finding ($(finding.severity)) - $(finding.title) on $(finding.target)</description>
+    <group>hexward_snapshot,</group>
+  </rule>
+
+</group>
