@@ -2,8 +2,8 @@
 
 Wazuh decoder and rules for [Hexward Labs](https://hexwardlabs.com) security
 tools. Every finding RuleHawk, Loglight, CertLight, Decoy, DmarcWatch,
-Patchlight, TenantWatch or Attack Surface Monitor opens or resolves becomes a
-Wazuh alert, at a level that matches its severity.
+Patchlight, TenantWatch, Attack Surface Monitor, AuditLight or TopoLight opens
+or resolves becomes a Wazuh alert, at a level that matches its severity.
 
 The products emit the [Hexward Finding Schema](https://github.com/nizartuanku/hexward-core/blob/main/SCHEMA.md)
 (`hexward.finding/1`), so one rule set covers all of them. Free in every
