@@ -92,4 +92,4 @@ Wazuh manager 4.14.9 (Docker), October 2026:
 
 ## License
 
-Apache-2.0. © Nizar Tuanku — Cybersecurity.
+Apache-2.0. © Nizar Tuanku — Cybersecurity Tools + AI.
