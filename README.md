@@ -90,6 +90,10 @@ Wazuh manager 4.14.9 (Docker), October 2026:
 - Path B end to end: RuleHawk 0.1.3 on a second host sending TCP syslog
   (RFC 5424) to the manager, all 10 findings decoded by `hexward` and alerted.
 
+## Hexward products
+
+The Hexward tools that send these findings (RuleHawk, Loglight, CertLight, Patchlight and more) are on [GitHub](https://github.com/nizartuanku). Pro and Team licences are on [Whop](https://whop.com/nizar-tuanku/?utm_source=github&utm_medium=readme&utm_campaign=hexward-wazuh).
+
 ## License
 
 Apache-2.0. © Nizar Tuanku — Cybersecurity Tools + AI.
